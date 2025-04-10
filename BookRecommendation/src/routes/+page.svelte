@@ -3,6 +3,9 @@
     import {page} from "$app/stores"
     //page.data.session tartalmazza a felhasználó auth adatait
     console.log($page.data.session)
+
+    let email = "";
+    let password = "";
 </script>
 
 <div>
@@ -11,6 +14,7 @@
         <SignOut/>
     {:else}
         <h1>You are not logged in</h1>
+        <SignIn provider="credentials"></SignIn>
         <SignIn provider="github"></SignIn>
     {/if}
 </div>
