@@ -3,9 +3,10 @@
     import {page} from "$app/stores"
     //page.data.session tartalmazza a felhasználó auth adatait
     console.log($page.data.session)
+    import {signIn} from '@auth/sveltekit/client';
 
-    let email = "";
-    let password = "";
+    let email = '';
+    let password = '';
 </script>
 
 <div>
@@ -14,7 +15,22 @@
         <SignOut/>
     {:else}
         <h1>You are not logged in</h1>
-        <SignIn provider="credentials"></SignIn>
+
+        <div>
+            <form>
+                <label>
+                    Email
+                    <input name="email" type="email" bind:value={email}/>
+                </label>
+                <label>
+                    Password
+                    <input name="password" type="password" bind:value={password}/>
+                </label>
+                <button on:click={() => signIn("credentials", { email, password })}>
+                    Log in
+                </button>
+            </form>
+        </div>
         <SignIn provider="github"></SignIn>
     {/if}
 </div>
