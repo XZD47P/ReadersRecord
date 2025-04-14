@@ -50,5 +50,26 @@ export const {handle, signIn, signOut} = SvelteKitAuth({
     adapter: DrizzleAdapter(db),
     session: {
         strategy: 'jwt'
+    },
+    callbacks: {
+        async jwt({token, user}) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
+            }
+            return token;
+        },
+        async session({session, token}) {
+            if (token) {
+                // @ts-ignore
+                session.user.id = token.id;
+                if (token.email != null) {
+                    session.user.email = token.email;
+                }
+                session.user.name = token.name;
+            }
+            return session;
+        }
     }
 })

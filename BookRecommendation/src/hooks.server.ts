@@ -1,5 +1,5 @@
 import {redirect, type Handle} from "@sveltejs/kit";
-import {handle as authenticationHandle} from "./auth";
+import {handle as authenticationHandle} from "$lib/server/auth";
 import {sequence} from "@sveltejs/kit/hooks";
 
 const authorizationHandle: Handle = async ({event, resolve}) => {
