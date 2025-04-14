@@ -3,12 +3,6 @@
     import {page} from "$app/stores"
     //page.data.session tartalmazza a felhasználó auth adatait
     console.log($page.data.session)
-    import RegisterForm from "$lib/components/RegisterForm.svelte";
-    import LoginForm from "$lib/components/LoginForm.svelte";
-    import {signIn} from "@auth/sveltekit/client";
-
-    let email = ""
-    let password = ""
 
 </script>
 
