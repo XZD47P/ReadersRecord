@@ -26,7 +26,7 @@
   "dependencies": {
     "@auth/core": "^0.38.0",
     "@auth/drizzle-adapter": "^1.8.0",
-    "@auth/sveltekit": "^1.8.0",
+    "@auth/sveltekit": "1.7.4",
     "@node-rs/bcrypt": "^1.10.7",
     "better-sqlite3": "^11.9.1",
     "dotenv": "^16.4.7",

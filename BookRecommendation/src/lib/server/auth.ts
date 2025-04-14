@@ -62,11 +62,10 @@ export const {handle, signIn, signOut} = SvelteKitAuth({
         },
         async session({session, token}) {
             if (token) {
-                // @ts-ignore
+                //@ts-ignore
                 session.user.id = token.id;
-                if (token.email != null) {
-                    session.user.email = token.email;
-                }
+                //@ts-ignore
+                session.user.email = token.email;
                 session.user.name = token.name;
             }
             return session;

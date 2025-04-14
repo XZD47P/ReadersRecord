@@ -1,42 +1,48 @@
 <script lang="ts">
-    import {signIn} from '@auth/sveltekit/client';
-    import {goto} from '$app/navigation';
+    import {signIn} from "@auth/sveltekit/client";
     import {SignIn} from "@auth/sveltekit/components";
+    import {goto} from "$app/navigation";
 
     let email = '';
     let password = '';
-    let error = '';
+    let errorMessage = '';
 
-    async function loginUser(event: Event) {
+    async function handleLogin(event: Event) {
         event.preventDefault();
-        error = '';
 
-        const result = await signIn('credentials', {
-            email,
-            password,
-            redirect: false,
-        });
+        try {
+            const result = await signIn("credentials", {
+                email,
+                password,
+                callbackUrl: "/"
+            });
 
-        if (result?.ok) {
-            goto('/'); // or wherever you want to redirect
-        } else {
-            error = 'Invalid email or password';
+        } catch (error) {
+            errorMessage = "An error occurred during login.";
+            console.error("Login error:", error);
         }
     }
 </script>
 
-<form class="login-form" on:submit={loginUser}>
-    <h2>Login</h2>
+<div>
+    <form class="login-form" on:submit={handleLogin}>
+        <label>
+            Email
+            <input bind:value={email} name="email" required type="email"/>
+        </label>
+        <label>
+            Password
+            <input bind:value={password} name="password" required type="password"/>
+        </label>
+        <button type="submit">Log in</button>
+    </form>
 
-    {#if error}
-        <p class="error">{error}</p>
+    {#if errorMessage}
+        <div class="error">{errorMessage}</div>
     {/if}
+</div>
 
-    <input bind:value={email} placeholder="Email" required type="email"/>
-    <input bind:value={password} placeholder="Password" required type="password"/>
-    <button type="submit">Login</button>
-</form>
-<SignIn provider="github"></SignIn>
+<button on:click={()=> signIn("github", {callbackUrl: "/"})}>Log in with Github</button>
 
 <style>
     .login-form {

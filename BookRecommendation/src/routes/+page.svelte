@@ -3,9 +3,12 @@
     import {page} from "$app/stores"
     //page.data.session tartalmazza a felhasználó auth adatait
     console.log($page.data.session)
-    import {signIn} from '@auth/sveltekit/client';
     import RegisterForm from "$lib/components/RegisterForm.svelte";
     import LoginForm from "$lib/components/LoginForm.svelte";
+    import {signIn} from "@auth/sveltekit/client";
+
+    let email = ""
+    let password = ""
 
 </script>
 
@@ -15,8 +18,6 @@
         <SignOut/>
     {:else}
         <h1>You are not logged in</h1>
-        <LoginForm/>
-        <RegisterForm/>
     {/if}
 </div>
 
