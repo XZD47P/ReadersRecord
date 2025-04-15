@@ -1,9 +1,8 @@
 <script lang="ts">
-    import {page} from '$app/stores';
     import {SignOut} from "@auth/sveltekit/components";
     import {signOut} from "@auth/sveltekit/client";
 
-    export let data:{
+    export let data: {
         session: any;
         pathname: string;
     }
@@ -13,16 +12,11 @@
     <div class="left">
         <a class:active={data.pathname === '/'} href="/">Home</a>
     </div>
-    {#if data.pathname==='/'}
-        <div class="center">
-            <input type="text" placeholder="Books title...">
-        </div>
-    {/if}
     <div class="right">
-    {#if data.session}
-        <button class="link-button" onclick={()=> signOut()}>Sign out</button>
+        {#if data.session}
+            <button class="link-button" onclick={()=> signOut()}>Sign out</button>
         {:else}
-        <a class:active={data.pathname === '/signin'} href="/signin">Login</a>
+            <a class:active={data.pathname === '/signin'} href="/signin">Login</a>
         {/if}
     </div>
 </nav>
@@ -57,15 +51,11 @@
         font-weight: bold;
         padding: 0;
     }
-    .right{
+
+    .right {
         text-decoration: none;
         color: inherit;
         margin-left: auto;
 
-    }
-    .center{
-        margin: auto;
-        flex-grow: 1;
-        text-align: center;
     }
 </style>
