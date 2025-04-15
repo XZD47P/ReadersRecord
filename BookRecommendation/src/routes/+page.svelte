@@ -1,13 +1,18 @@
 <script lang="ts">
     import {SignIn, SignOut} from "@auth/sveltekit/components";
-    import {page} from "$app/stores"
+    // import {page} from "$app/stores"
+
+    export let data:{
+        session: any;
+    }
     //page.data.session tartalmazza a felhasználó auth adatait
-    console.log($page.data.session)
+    console.log(data.session)
+
 
 </script>
 
 <div>
-    {#if $page.data.session}
+    {#if data.session}
         <h1>You are logged in</h1>
         <SignOut/>
     {:else}
