@@ -12,7 +12,10 @@
 
     //Könyv keresés funkció implementálása
     let searchQuery: string = '';
-    let books: Array<{ title: string; thumbnail: string }> = [];
+    let books: Array<{
+        title: string;
+        thumbnail: string
+    }> = [];
     let loading: boolean = false;
     let error: string = '';
 
@@ -23,7 +26,7 @@
     }
 
     async function searchBooks() {
-        if (!searchQuery) return;  // Don't search if the query is empty
+        if (!searchQuery) return;  //Ne keressen, ha nincs benne szöveg
 
         loading = true;
         error = '';
@@ -32,7 +35,7 @@
             const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${searchQuery}&maxResults=30&key=AIzaSyDemm48k83DIKcCmLUobV3qAR1wl2_V1L8`);
             const data = await response.json();
 
-            // Process the results to get the title and thumbnail
+            // A kapott válasz "book" hoz való rendelése
             books = data.items?.map((item: any) => ({
                 title: item.volumeInfo.title,
                 thumbnail: item.volumeInfo.imageLinks?.thumbnail || Cover,
