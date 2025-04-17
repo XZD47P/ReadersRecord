@@ -1,11 +1,11 @@
 <script lang="ts">
-    let {title, thumbnail} = $props();
+    let {title, thumbnail, id} = $props();
 </script>
 
-<div class="book-card">
+<a class="book-card" href="/book/{id}">
     <img alt="Book cover not found" class="thumbnail" src={thumbnail}/>
     <h3>{title}</h3>
-</div>
+</a>
 
 <style>
 
@@ -26,6 +26,7 @@
         padding: 1rem;
         text-align: center;
         transition: transform 0.2s ease;
+        text-decoration: none;
     }
 
     .book-card:hover {

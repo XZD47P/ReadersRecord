@@ -14,7 +14,8 @@
     let searchQuery: string = '';
     let books: Array<{
         title: string;
-        thumbnail: string
+        thumbnail: string;
+        id: string;
     }> = [];
     let loading: boolean = false;
     let error: string = '';
@@ -39,6 +40,7 @@
             books = data.items?.map((item: any) => ({
                 title: item.volumeInfo.title,
                 thumbnail: item.volumeInfo.imageLinks?.thumbnail || Cover,
+                id: item.id,
             })) || [];
         } catch (e) {
             error = 'Failed to fetch books';
@@ -70,7 +72,7 @@
 
     <div class="books-list">
         {#each books as book}
-            <Book title={book.title} thumbnail={book.thumbnail}/>
+            <Book title={book.title} thumbnail={book.thumbnail} id={book.id}/>
         {/each}
     </div>
 </div>
