@@ -44,6 +44,16 @@ sqlite.exec(`
         expires      INTEGER NOT NULL,
         FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE
     );
+
+    CREATE TABLE IF NOT EXISTS book_rating
+    (
+        user_id TEXT,
+        book_id TEXT,
+        rating  INTEGER,
+        comment TEXT,
+        PRIMARY KEY (user_id, book_id),
+        FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+    );
 `);
 
 export const users = sqliteTable("user", {
@@ -88,3 +98,5 @@ export const sessions = sqliteTable("session", {
         .references(() => users.id, {onDelete: "cascade"}),
     expires: integer("expires", {mode: "timestamp_ms"}).notNull(),
 })
+
+export const book_ratings = sqliteTable()
