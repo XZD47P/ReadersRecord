@@ -34,16 +34,48 @@
 
     //Értékelés
     let rating = 0;
+    let comment = '';
 
-    onMount(() => {
-        const stored = localStorage.getItem(`rating-${data.book.id}`);
-        if (stored) rating = +stored;
+    let averageRating: number | null = null;
+    let reviewCount: number = 0;
+    let reviews: {
+        user_id: string;
+        rating: number;
+        comment: string | null;
+    }[] = [];
+
+
+    onMount(async () => {
+        if (!data.session) return;
+
+        const res = await fetch(`/api/rating/${book.id}`);
+        if (res.ok) {
+            const existing = await res.json();
+            rating = existing.rating || 0;
+            comment = existing.comment || '';
+        }
+
+        const res2 = await fetch(`/api/rating/${book.id}/all`);
+        if (res.ok) {
+            const data = await res.json();
+            averageRating = data.averageRating;
+            reviewCount = data.reviewCount;
+            reviews = data.reviews;
+        }
     });
 
-    function handleRate(value: number) {
+    async function handleRate(value: number) {
         rating = value;
-        localStorage.setItem(`rating-${data.book.id}`, value.toString());
-        // If you had a backend, this is where you’d POST the rating
+
+        const res = await fetch(`/api/rating/${book.id}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({rating, comment})
+        });
+
+        if (!res.ok) {
+            alert('Could not save rating.');
+        }
     }
 </script>
 <BookDetails
@@ -56,7 +88,38 @@
         title={book.volumeInfo.title}/>
 {#if data.session}
     <h3>Rate this book:</h3>
-    <BookRating editable={!!data.session} onRate={handleRate} rating={rating}/>
+    <BookRating rating={rating} editable={true} onRate={handleRate}/>
+
+    <textarea bind:value={comment} placeholder="Leave a comment..." rows="3"></textarea>
+    <button on:click={() => handleRate(rating)}>Submit Rating</button>
 {:else }
     <h3>Login <a href="/signin">here</a> to rate this book!</h3>
 {/if}
+{#if averageRating}
+    <p><strong>⭐ {averageRating}</strong> ({reviewCount} reviews)</p>
+{:else}
+    <p>No ratings yet.</p>
+{/if}
+
+<div class="review-list">
+    {#each reviews as review}
+        <div class="review">
+            <BookRating rating={review.rating} editable={false}/>
+            {#if review.comment}
+                <p>{review.comment}</p>
+            {/if}
+            <small>User: {review.user_id}</small>
+        </div>
+    {/each}
+</div>
+
+<style>
+    .review-list {
+        margin-top: 2rem;
+    }
+
+    .review {
+        border-bottom: 1px solid #ddd;
+        padding: 0.5rem 0;
+    }
+</style>

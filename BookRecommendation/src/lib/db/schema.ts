@@ -47,9 +47,9 @@ sqlite.exec(`
 
     CREATE TABLE IF NOT EXISTS book_rating
     (
-        user_id TEXT,
-        book_id TEXT,
-        rating  INTEGER,
+        user_id TEXT    NOT NULL,
+        book_id TEXT    NOT NULL,
+        rating  INTEGER NOT NULL,
         comment TEXT,
         PRIMARY KEY (user_id, book_id),
         FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
@@ -91,12 +91,31 @@ export const accounts = sqliteTable(
     })
 )
 
-export const sessions = sqliteTable("session", {
-    sessionToken: text("sessionToken").primaryKey(),
-    userId: text("userId")
-        .notNull()
-        .references(() => users.id, {onDelete: "cascade"}),
-    expires: integer("expires", {mode: "timestamp_ms"}).notNull(),
-})
+export const sessions = sqliteTable(
+    "session",
+    {
+        sessionToken: text("sessionToken").primaryKey(),
+        userId: text("userId")
+            .notNull()
+            .references(() => users.id, {onDelete: "cascade"}),
+        expires: integer("expires", {mode: "timestamp_ms"}).notNull(),
+    })
 
-export const book_ratings = sqliteTable()
+export const book_ratings = sqliteTable(
+    "book_rating",
+    {
+        user_id: text("user_id")
+            .notNull()
+            .references(() => users.id, {onDelete: "cascade"}),
+        book_id: text("book_id")
+            .notNull(),
+        rating: integer("rating")
+            .notNull(),
+        comment: text("comment")
+    },
+    (book_rating) => ({
+        compoundKey: primaryKey({
+            columns: [book_rating.user_id, book_rating.book_id]
+        })
+    })
+)
