@@ -44,8 +44,19 @@
         comment: string | null;
     }[] = [];
 
+    async function loadAllRatings(bookId: string) {
+        const res = await fetch(`/api/rating/${bookId}/all`);
+        if (res.ok) {
+            const data = await res.json();
+            averageRating = data.averageRating;
+            reviewCount = data.reviewCount;
+            reviews = data.reviews;
+        }
+    }
 
     onMount(async () => {
+        await loadAllRatings(book.id);
+
         if (!data.session) return;
 
         const res = await fetch(`/api/rating/${book.id}`);
@@ -55,13 +66,6 @@
             comment = existing.comment || '';
         }
 
-        const res2 = await fetch(`/api/rating/${book.id}/all`);
-        if (res.ok) {
-            const data = await res.json();
-            averageRating = data.averageRating;
-            reviewCount = data.reviewCount;
-            reviews = data.reviews;
-        }
     });
 
     async function handleRate(value: number) {
@@ -76,6 +80,8 @@
         if (!res.ok) {
             alert('Could not save rating.');
         }
+
+        await loadAllRatings(book.id);
     }
 </script>
 <BookDetails
@@ -86,6 +92,7 @@
         publishDate={book.volumeInfo.publishedDate}
         thumbnail={book.volumeInfo.imageLinks?.thumbnail || Cover}
         title={book.volumeInfo.title}/>
+
 {#if data.session}
     <h3>Rate this book:</h3>
     <BookRating rating={rating} editable={true} onRate={handleRate}/>
@@ -95,7 +102,8 @@
 {:else }
     <h3>Login <a href="/signin">here</a> to rate this book!</h3>
 {/if}
-{#if averageRating}
+
+{#if averageRating !== null}
     <p><strong>⭐ {averageRating}</strong> ({reviewCount} reviews)</p>
 {:else}
     <p>No ratings yet.</p>

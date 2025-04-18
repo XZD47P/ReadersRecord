@@ -15,11 +15,6 @@ export const GET: RequestHandler = async ({params}) => {
     const average =
         rows.length > 0 ? rows.reduce((sum, r) => sum + r.rating, 0) / rows.length : null;
 
-    // console.log(json({
-    //     averageRating: average ? Number(average.toFixed(1)) : null,
-    //     reviewCount: rows.length,
-    //     reviews: rows
-    // }))
     return json({
         averageRating: average ? Number(average.toFixed(1)) : null,
         reviewCount: rows.length,
