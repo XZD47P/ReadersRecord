@@ -3,6 +3,7 @@
     import Cover from "$lib/pic/default-thumbnail.png";
     import {onMount} from "svelte";
     import BookRating from "$lib/components/BookRating.svelte";
+    import BookReviews from "$lib/components/BookReviews.svelte";
 
     export let data: {
         session: any,
@@ -39,7 +40,7 @@
     let averageRating: number | null = null;
     let reviewCount: number = 0;
     let reviews: {
-        user_id: string;
+        username: string;
         rating: number;
         comment: string | null;
     }[] = [];
@@ -103,31 +104,12 @@
     <h3>Login <a href="/signin">here</a> to rate this book!</h3>
 {/if}
 
-{#if averageRating !== null}
-    <p><strong>⭐ {averageRating}</strong> ({reviewCount} reviews)</p>
-{:else}
-    <p>No ratings yet.</p>
-{/if}
-
-<div class="review-list">
-    {#each reviews as review}
-        <div class="review">
-            <BookRating rating={review.rating} editable={false}/>
-            {#if review.comment}
-                <p>{review.comment}</p>
-            {/if}
-            <small>User: {review.user_id}</small>
-        </div>
-    {/each}
-</div>
+<BookReviews
+        averageRating={averageRating}
+        reviewCount={reviewCount}
+        reviews={reviews}
+/>
 
 <style>
-    .review-list {
-        margin-top: 2rem;
-    }
 
-    .review {
-        border-bottom: 1px solid #ddd;
-        padding: 0.5rem 0;
-    }
 </style>
