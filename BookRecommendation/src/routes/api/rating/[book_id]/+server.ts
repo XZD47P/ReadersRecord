@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({params, locals}) => {
             )
         );
 
-    console.log(row[0]);
+    // console.log(row[0]);
     return json(row[0] || {});
 }
 
