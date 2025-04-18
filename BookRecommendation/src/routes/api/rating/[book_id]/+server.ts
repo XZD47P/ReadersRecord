@@ -23,8 +23,8 @@ export const GET: RequestHandler = async ({params, locals}) => {
             )
         );
 
-    console.log(row);
-    return json(row || {});
+    console.log(row[0]);
+    return json(row[0] || {});
 }
 
 export const POST: RequestHandler = async ({params, locals, request}) => {
