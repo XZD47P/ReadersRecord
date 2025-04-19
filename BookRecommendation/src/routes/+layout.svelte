@@ -14,6 +14,7 @@
     </div>
     <div class="right">
         {#if data.session}
+            <a class:active={data.pathname === '/profile'} href="/profile">Profile</a>
             <button class="link-button" onclick={()=> signOut()}>Sign out</button>
         {:else}
             <a class:active={data.pathname === '/signin'} href="/signin">Login</a>
