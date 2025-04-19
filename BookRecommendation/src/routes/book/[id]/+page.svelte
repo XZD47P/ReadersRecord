@@ -87,10 +87,12 @@
 </script>
 <BookDetails
         author={book.volumeInfo.authors}
+        bookId={book.id}
         desc={book.volumeInfo.description}
         genre={book.volumeInfo.categories}
         isbnNumber={isbn13}
         publishDate={book.volumeInfo.publishedDate}
+        session={data.session}
         thumbnail={book.volumeInfo.imageLinks?.thumbnail || Cover}
         title={book.volumeInfo.title}/>
 

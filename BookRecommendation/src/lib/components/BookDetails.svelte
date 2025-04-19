@@ -1,5 +1,46 @@
 <script lang="ts">
-    let {title, thumbnail, publishDate, isbnNumber, genre, author, desc} = $props();
+    import {onMount} from "svelte";
+
+    let {title, thumbnail, publishDate, isbnNumber, genre, author, desc, bookId, session} = $props();
+
+    //Kedvencek felvétele
+    let isFavorite = $state(false);
+    let message = $state();
+
+    onMount(async () => {
+        if (session) {
+            const res = await fetch(`/api/favourite?userId=${session.user.id}&bookId=${bookId}`);
+            if (res.ok) {
+                const data = await res.json();
+                isFavorite = data.isFavorite;
+            }
+        }
+    });
+
+    async function toggleFavorite() {
+        if (!session) {
+            message = 'You need to be logged in to add favorites.';
+            return;
+        }
+
+        const res = await fetch('/api/favourite', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                bookId,
+                userId: session.user.id,
+                favorite: !isFavorite
+            })
+        });
+
+        if (res.ok) {
+            isFavorite = !isFavorite;
+            message = isFavorite ? 'Added to favorites!' : 'Removed from favorites.';
+        } else {
+            message = 'Something went wrong.';
+        }
+    }
+
 </script>
 
 <div class="book-details">
@@ -7,6 +48,14 @@
         <img alt="Default book cover" src={thumbnail}/>
         <h1>{title}</h1>
         <p class="author">By: {author}</p>
+        {#if session}
+            <button class="fav-button" onclick={toggleFavorite}>
+                {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+            </button>
+        {/if}
+        {#if message}
+            <p class="message">{message}</p>
+        {/if}
     </div>
 
     <div class="right-section">
@@ -92,5 +141,27 @@
         .right-section {
             width: 100%;
         }
+    }
+
+    .fav-button {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-weight: bold;
+    }
+
+    .fav-button:hover {
+        background-color: #0099f3;
+    }
+
+    .message {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
     }
 </style>
