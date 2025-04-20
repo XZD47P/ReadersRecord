@@ -55,3 +55,26 @@ export const POST: RequestHandler = async ({params, locals, request}) => {
 
     return json({success: true});
 }
+
+export const DELETE: RequestHandler = async ({params, locals}) => {
+    const session = await locals.auth();
+
+    if (!session) {
+        return new Response("Unauthorized", {status: 401});
+    }
+    const {book_id} = params;
+    if (!book_id) {
+        return new Response("Missing Book ID", {status: 400});
+    }
+
+    await db.delete(book_ratings)
+        .where(
+            and(
+                //@ts-ignore
+                eq(book_ratings.user_id, session.user?.id),
+                eq(book_ratings.book_id, book_id)
+            )
+        );
+
+    return json({success: true});
+}

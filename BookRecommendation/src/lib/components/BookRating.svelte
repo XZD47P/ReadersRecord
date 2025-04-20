@@ -7,6 +7,7 @@
     let comment = $state("");
     let maxStars: number = 5;
     let submitting = $state(false);
+    let hasReview = $state(false);
 
     let hover = $state(0);
 
@@ -16,6 +17,9 @@
             const existing = await res.json();
             rating = existing.rating || 0;
             comment = existing.comment || '';
+            if (rating > 0) {
+                hasReview = true;
+            }
         }
     });
 
@@ -34,10 +38,29 @@
         if (!res.ok) {
             alert('Could not save rating.');
         } else {
+            hasReview = true;
             onUpdate(); //Szólunk, hogy a mentés megtörtént, a parent frissíthet
         }
 
         submitting = false;
+    }
+
+    async function deleteReview() {
+        const confirmed = confirm("Are you sure you want to delete your review?");
+        if (!confirmed) return;
+
+        const res = await fetch(`/api/rating/${bookId}`, {
+            method: 'DELETE',
+        });
+
+        if (res.ok) {
+            rating = 0;
+            comment = '';
+            hasReview = false;
+            onUpdate();
+        } else {
+            alert("Could not delete review.");
+        }
     }
 </script>
 <div class="rating-container">
@@ -60,9 +83,17 @@
             placeholder="Leave a comment..."
             rows="3"
     ></textarea>
-    <button class="submit-btn" disabled={submitting} onclick={submitRating}>
-        {submitting ? 'Submitting...' : 'Submit Rating'}
-    </button>
+    <div class="btn-row">
+        <button class="submit-btn" disabled={submitting} onclick={submitRating}>
+            {submitting ? 'Submitting...' : 'Submit Rating'}
+        </button>
+
+        {#if hasReview}
+            <button class="delete-btn" onclick={deleteReview}>
+                Delete Review
+            </button>
+        {/if}
+    </div>
 </div>
 
 <style>
@@ -103,7 +134,8 @@
         font-size: 0.9rem;
     }
 
-    .submit-btn {
+    .submit-btn,
+    .delete-btn {
         align-self: flex-end;
         padding: 0.4rem 0.9rem;
         background-color: #0070f3;
@@ -122,5 +154,14 @@
 
     .submit-btn:hover:not(:disabled) {
         background-color: #005ec2;
+    }
+
+    .delete-btn {
+        background-color: #ff5c5c;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background-color: #e04848;
     }
 </style>
