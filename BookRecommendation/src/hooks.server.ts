@@ -6,7 +6,7 @@ const authorizationHandle: Handle = async ({event, resolve}) => {
     if (event.url.pathname === "/profile") {
         const session = await event.locals.auth();
         if (!session) {
-            throw redirect(303, "/signin");
+            throw redirect(303, "/login");
         }
     }
 

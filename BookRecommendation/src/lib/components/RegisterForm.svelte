@@ -1,4 +1,6 @@
 <script lang="ts">
+    import {signIn} from "@auth/sveltekit/client";
+
     let email = '';
     let password = '';
     let name = '';
@@ -30,71 +32,175 @@
     }
 </script>
 
-<form class="register-form" on:submit={registerUser}>
-    <h2>Register</h2>
+<div class="register-wrapper">
+    <h2>Create an account</h2>
 
-    {#if success}
-        <p class="success">{success}</p>
-    {/if}
-    {#if error}
-        <p class="error">{error}</p>
-    {/if}
+    <form class="register-form" on:submit={registerUser}>
+        {#if success}
+            <div class="success">{success}</div>
+        {/if}
+        {#if error}
+            <div class="error">{error}</div>
+        {/if}
 
-    <input bind:value={name} placeholder="Name" required type="text"/>
-    <input bind:value={email} placeholder="Email" required type="email"/>
-    <input bind:value={password} placeholder="Password" required type="password"/>
-    <button type="submit">Register</button>
-</form>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input bind:value={name} id="name" name="name" placeholder="John Doe" required type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input bind:value={email} id="email" name="email" placeholder="you@example.com" required type="email"/>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input bind:value={password} id="password" name="password" placeholder="••••••••" required type="password"/>
+        </div>
+
+        <button class="primary-btn" type="submit">Register</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <button class="github-btn" on:click={() => signIn("github", { callbackUrl: "/" })}>
+        <i class="fab fa-github"></i> Sign up with GitHub
+    </button>
+
+    Already have an account? <a href="/login">Log in here</a>
+</div>
 
 <style>
-    .register-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+    .register-wrapper {
         max-width: 400px;
-        margin: 2rem auto;
-        padding: 24px;
-        border-radius: 12px;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        color: #333;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
 
-    input {
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
+    h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
+        color: #333;
     }
 
-    button {
-        padding: 10px;
-        background-color: #0066ff;
+    .register-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        text-align: left;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #444;
+    }
+
+    input {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #0070f3;
+    }
+
+    .primary-btn {
+        padding: 0.75rem;
+        background-color: #0070f3;
         color: white;
-        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .primary-btn:hover {
+        background-color: #0059c1;
+    }
+
+    .divider {
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+        color: #999;
+        position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background-color: #ddd;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+    .github-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: #24292e;
+        color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         transition: background-color 0.2s;
     }
 
-    button:hover {
-        background-color: #004acc;
-    }
-
-    .success {
-        color: green;
-        font-weight: bold;
+    .github-btn:hover {
+        background-color: #1b1f23;
     }
 
     .error {
         color: red;
-        font-weight: bold;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .success {
+        color: green;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .fab.fa-github {
+        font-size: 1.2rem;
+    }
+
+    a, a:visited {
+        color: #0070f3;
+        text-decoration: none;
     }
 </style>

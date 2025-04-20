@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({locals}) => {
     if (!session) {
         return {
             status: 302,
-            redirect: '/signin'
+            redirect: '/login'
         };
     }
 
