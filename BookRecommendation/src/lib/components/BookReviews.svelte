@@ -4,6 +4,7 @@
 
 {#if averageRating !== null}
     <p class="average-rating">
+        Average Rating:
         <span class="star">⭐</span> {averageRating}
         <span class="review-count">({reviewCount} reviews)</span>
     </p>

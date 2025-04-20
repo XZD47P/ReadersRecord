@@ -1,9 +1,7 @@
 <script lang="ts">
-    import {onMount, createEventDispatcher} from "svelte";
+    import {onMount} from "svelte";
 
-    let {bookId} = $props();
-
-    const dispatch = createEventDispatcher();
+    let {bookId, onUpdate} = $props();
 
     let rating = $state(0);
     let comment = $state("");
@@ -36,14 +34,16 @@
         if (!res.ok) {
             alert('Could not save rating.');
         } else {
-            dispatch('updated'); //Szólunk, hogy a mentés megtörtént, a parent frissíthet
+            onUpdate(); //Szólunk, hogy a mentés megtörtént, a parent frissíthet
         }
 
         submitting = false;
     }
 </script>
-<div>
-    {#each Array(maxStars) as _, i}
+<div class="rating-container">
+    <h3>Rate this book:</h3>
+    <div class="stars">
+        {#each Array(maxStars) as _, i}
     <span
             class="star {i < (hover || rating) ? 'filled' : ''}"
             onclick={() => handleRate(i + 1)}
@@ -52,26 +52,75 @@
     >
             ★
         </span>
-    {/each}
+        {/each}
+    </div>
+    <textarea
+            bind:value={comment}
+            class="comment-box"
+            placeholder="Leave a comment..."
+            rows="3"
+    ></textarea>
+    <button class="submit-btn" disabled={submitting} onclick={submitRating}>
+        {submitting ? 'Submitting...' : 'Submit Rating'}
+    </button>
 </div>
-<textarea
-        bind:value={comment}
-        placeholder="Leave a comment..."
-        rows="3"
-></textarea>
-<button disabled={submitting} onclick={submitRating}>
-    {submitting ? 'Submitting...' : 'Submit Rating'}
-</button>
 
 <style>
+    .stars {
+        display: flex;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
     .star {
         cursor: pointer;
-        font-size: 2rem;
         color: #ccc;
-        transition: color 0.2s;
+        transition: color 0.2s ease;
+        margin: 0 2px;
     }
 
     .star.filled {
         color: gold;
+    }
+
+    .rating-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        max-width: 360px;
+        margin: 1rem auto;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .comment-box {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.4rem;
+        border: 1px solid #ccc;
+        font-size: 0.9rem;
+    }
+
+    .submit-btn {
+        align-self: flex-end;
+        padding: 0.4rem 0.9rem;
+        background-color: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 0.4rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .submit-btn:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        background-color: #005ec2;
     }
 </style>

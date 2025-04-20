@@ -68,11 +68,12 @@
         title={book.volumeInfo.title}/>
 
 {#if data.session}
-    <BookRating bookId={book.id} on:updated={() => loadAllRatings(book.id)}/>
+    <BookRating bookId={book.id}
+                onUpdate={() => loadAllRatings(book.id)}/>
 {:else }
     <h3>Login <a href="/signin">here</a> to rate this book!</h3>
 {/if}
-
+<h1>Others review:</h1>
 <BookReviews
         averageRating={averageRating}
         reviewCount={reviewCount}
