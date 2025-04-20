@@ -29,6 +29,8 @@
             body: JSON.stringify({
                 bookId,
                 userId: session.user.id,
+                title: title,
+                thumbnail: thumbnail,
                 favorite: !isFavorite
             })
         });

@@ -57,8 +57,10 @@ sqlite.exec(`
 
     CREATE TABLE IF NOT EXISTS favourite
     (
-        user_id TEXT NOT NULL,
-        book_id TEXT NOT NULL,
+        user_id   TEXT NOT NULL,
+        book_id   TEXT NOT NULL,
+        title     TEXT NOT NULL,
+        thumbnail TEXT NOT NULL,
         PRIMARY KEY (user_id, book_id),
         FOREIGN KEY (user_id) references user (id) ON DELETE CASCADE
     );
@@ -135,7 +137,9 @@ export const favourites = sqliteTable(
         user_id: text("user_id")
             .notNull()
             .references(() => users.id, {onDelete: "cascade"}),
-        book_id: text("book_id").notNull()
+        book_id: text("book_id").notNull(),
+        title: text("title").notNull(),
+        thumbnail: text("thumbnail").notNull(),
     },
     (favourite) => ({
         compoundKey: primaryKey({
