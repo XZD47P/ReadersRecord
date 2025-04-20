@@ -60,10 +60,11 @@
         <ProfileCard data={data}/>
     </div>
     <div class="currently-reading">
+        Currently reading:
         {#if currentlyReading}
             <Book title={currentlyReading.title} thumbnail={currentlyReading.thumbnailUrl} id={currentlyReading.id}/>
         {:else}
-            You don't read anything right now!
+            <p>You don't read anything right now!</p>
         {/if}
     </div>
 </div>
