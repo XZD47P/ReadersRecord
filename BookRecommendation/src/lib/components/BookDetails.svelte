@@ -16,7 +16,7 @@
                 isFavourite = data.isFavourite;
             }
 
-            const readRes = await fetch(`/api/reading-status?userId=${session.user.id}&bookId=${bookId}`);
+            const readRes = await fetch(`/api/reading_status?userId=${session.user.id}&bookId=${bookId}`);
             if (readRes.ok) {
                 const readData = await readRes.json();
                 isReading = readData.isReading;
@@ -56,7 +56,7 @@
             return;
         }
 
-        const res = await fetch('/api/reading-status', {
+        const res = await fetch('/api/reading_status', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
