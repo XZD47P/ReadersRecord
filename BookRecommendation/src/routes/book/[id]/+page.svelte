@@ -34,9 +34,6 @@
     )?.identifier;
 
     //Értékelés
-    let rating = 0;
-    let comment = '';
-
     let averageRating: number | null = null;
     let reviewCount: number = 0;
     let reviews: {
@@ -57,33 +54,7 @@
 
     onMount(async () => {
         await loadAllRatings(book.id);
-
-        if (!data.session) return;
-
-        const res = await fetch(`/api/rating/${book.id}`);
-        if (res.ok) {
-            const existing = await res.json();
-            rating = existing.rating || 0;
-            comment = existing.comment || '';
-        }
-
     });
-
-    async function handleRate(value: number) {
-        rating = value;
-
-        const res = await fetch(`/api/rating/${book.id}`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({rating, comment})
-        });
-
-        if (!res.ok) {
-            alert('Could not save rating.');
-        }
-
-        await loadAllRatings(book.id);
-    }
 </script>
 <BookDetails
         author={book.volumeInfo.authors}
@@ -97,11 +68,7 @@
         title={book.volumeInfo.title}/>
 
 {#if data.session}
-    <h3>Rate this book:</h3>
-    <BookRating rating={rating} editable={true} onRate={handleRate}/>
-
-    <textarea bind:value={comment} placeholder="Leave a comment..." rows="3"></textarea>
-    <button on:click={() => handleRate(rating)}>Submit Rating</button>
+    <BookRating bookId={book.id} on:updated={() => loadAllRatings(book.id)}/>
 {:else }
     <h3>Login <a href="/signin">here</a> to rate this book!</h3>
 {/if}
