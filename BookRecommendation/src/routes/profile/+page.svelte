@@ -13,6 +13,12 @@
         id: string;
     }> = [];
 
+    let currentlyReading: {
+        id: string;
+        title: string;
+        thumbnailUrl: string;
+    }
+
     onMount(async () => {
         if (data.session?.user?.id) {
             const res = await fetch(`/api/favourite?userId=${data.session.user.id}`);
@@ -22,6 +28,17 @@
                 title: item.title,
                 thumbnailUrl: item.thumbnailUrl
             }));
+
+            const readingRes = await fetch(`/api/reading_status?userId=${data.session.user.id}`);
+            const readingJson = await readingRes.json();
+            if (readingJson.read?.length > 0) {
+                const item = readingJson.read[0];
+                currentlyReading = {
+                    id: item.bookId,
+                    title: item.title,
+                    thumbnailUrl: item.thumbnailUrl
+                };
+            }
         }
     });
 
@@ -38,7 +55,18 @@
 </script>
 
 <h1>Profile</h1>
-<ProfileCard data={data}/>
+<div class="top-section">
+    <div class="profile-card-wrapper">
+        <ProfileCard data={data}/>
+    </div>
+    <div class="currently-reading">
+        {#if currentlyReading}
+            <Book title={currentlyReading.title} thumbnail={currentlyReading.thumbnailUrl} id={currentlyReading.id}/>
+        {:else}
+            You don't read anything right now!
+        {/if}
+    </div>
+</div>
 <h2>Favourite Books:</h2>
 {#if favourites.length > 0}
     <div class="slider-wrapper">
@@ -129,5 +157,30 @@
         color: #777;
         font-style: italic;
         margin-top: 2rem;
+    }
+
+    .top-section {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .profile-card-wrapper {
+        max-width: 350px;
+        flex: 1 1 auto;
+    }
+
+    .currently-reading {
+        max-width: 200px;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .currently-reading :global(.book-card) {
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
     }
 </style>

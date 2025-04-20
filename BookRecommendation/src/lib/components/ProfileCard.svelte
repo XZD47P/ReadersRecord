@@ -20,6 +20,7 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         margin: auto;
         text-align: center;
+        height: 190px;
     }
 
     .profile-card p {
