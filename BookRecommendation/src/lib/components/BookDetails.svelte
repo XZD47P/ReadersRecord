@@ -5,6 +5,7 @@
 
     //Kedvencek felvétele
     let isFavorite = $state(false);
+    let isReading = $state(false);
     let message = $state();
 
     onMount(async () => {
@@ -13,6 +14,12 @@
             if (res.ok) {
                 const data = await res.json();
                 isFavorite = data.isFavorite;
+            }
+
+            const readRes = await fetch(`/api/reading-status?userId=${session.user.id}&bookId=${bookId}`);
+            if (readRes.ok) {
+                const readData = await readRes.json();
+                isReading = readData.isReading;
             }
         }
     });
@@ -43,6 +50,34 @@
         }
     }
 
+    async function toggleReadingStatus() {
+        if (!session) {
+            message = 'You need to be logged in to add favorites.';
+            return;
+        }
+
+        const res = await fetch('/api/reading-status', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                bookId,
+                userId: session.user.id,
+                title: title,
+                thumbnail: thumbnail,
+                reading: !isReading,
+            })
+        })
+
+        if (res.ok) {
+            isReading = !isReading;
+            message = isReading ? 'Added to currently reading!' : 'Added to read!';
+        }
+        if (res.status === 409) {
+            const {error} = await res.json();
+            message = error;
+        }
+    }
+
 </script>
 
 <div class="book-details">
@@ -53,6 +88,9 @@
         {#if session}
             <button class="fav-button" onclick={toggleFavorite}>
                 {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+            </button>
+            <button class="read-button" onclick={toggleReadingStatus}>
+                {isReading ? "Mark as read" : "Mark as currently reading"}
             </button>
         {/if}
         {#if message}

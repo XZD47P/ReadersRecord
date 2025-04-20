@@ -65,6 +65,25 @@ sqlite.exec(`
         FOREIGN KEY (user_id) references user (id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS currently_reading
+    (
+        user_id   TEXT NOT NULL,
+        book_id   TEXT NOT NULL,
+        title     TEXT NOT NULL,
+        thumbnail TEXT NOT NULL,
+        PRIMARY KEY (user_id, book_id),
+        FOREIGN KEY (user_id) references user (id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS already_read
+    (
+        user_id   TEXT NOT NULL,
+        book_id   TEXT NOT NULL,
+        title     TEXT NOT NULL,
+        thumbnail TEXT NOT NULL,
+        PRIMARY KEY (user_id, book_id),
+        FOREIGN KEY (user_id) references user (id) ON DELETE CASCADE
+    );
 `);
 
 export const users = sqliteTable("user", {
@@ -133,6 +152,41 @@ export const book_ratings = sqliteTable(
 
 export const favourites = sqliteTable(
     "favourite",
+    {
+        user_id: text("user_id")
+            .notNull()
+            .references(() => users.id, {onDelete: "cascade"}),
+        book_id: text("book_id").notNull(),
+        title: text("title").notNull(),
+        thumbnail: text("thumbnail").notNull(),
+    },
+    (favourite) => ({
+        compoundKey: primaryKey({
+            columns: [favourite.user_id, favourite.book_id]
+        })
+    })
+)
+
+export const currentlyReading = sqliteTable(
+    "currently_reading",
+    {
+        user_id: text("user_id")
+            .notNull()
+            .unique()
+            .references(() => users.id, {onDelete: "cascade"}),
+        book_id: text("book_id").notNull(),
+        title: text("title").notNull(),
+        thumbnail: text("thumbnail").notNull(),
+    },
+    (favourite) => ({
+        compoundKey: primaryKey({
+            columns: [favourite.user_id, favourite.book_id]
+        })
+    })
+)
+
+export const alreadyRead = sqliteTable(
+    "already_read",
     {
         user_id: text("user_id")
             .notNull()
