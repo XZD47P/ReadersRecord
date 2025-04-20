@@ -73,7 +73,7 @@ export const GET: RequestHandler = async ({url}) => {
             ));
 
         return json({isReading: result.length > 0});
-    } else { //Ha nincs, akkor kérje le a felhasználó összes kedvenc könyvét
+    } else { //Ha nincs, akkor kérje le a felhasználó összes olvasott könyvét
         const result = await db
             .select({
                 bookId: currentlyReading.book_id,

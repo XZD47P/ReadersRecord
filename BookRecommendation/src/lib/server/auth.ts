@@ -18,7 +18,6 @@ export const {handle, signIn, signOut} = SvelteKitAuth({
             clientId: GITHUB_ID,
             clientSecret: GITHUB_SECRET
         }),
-        //TODO: Befejezni
         Credentials({
             //credentials object felel azért, hogy mit várunk el a felhasználótól, hogy megadjon
             credentials: {
