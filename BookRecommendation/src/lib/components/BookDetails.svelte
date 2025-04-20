@@ -4,7 +4,7 @@
     let {title, thumbnail, publishDate, isbnNumber, genre, author, desc, bookId, session} = $props();
 
     //Kedvencek felvétele
-    let isFavorite = $state(false);
+    let isFavourite = $state(false);
     let isReading = $state(false);
     let message = $state();
 
@@ -13,7 +13,7 @@
             const res = await fetch(`/api/favourite?userId=${session.user.id}&bookId=${bookId}`);
             if (res.ok) {
                 const data = await res.json();
-                isFavorite = data.isFavorite;
+                isFavourite = data.isFavourite;
             }
 
             const readRes = await fetch(`/api/reading-status?userId=${session.user.id}&bookId=${bookId}`);
@@ -38,13 +38,13 @@
                 userId: session.user.id,
                 title: title,
                 thumbnail: thumbnail,
-                favorite: !isFavorite
+                favourite: !isFavourite
             })
         });
 
         if (res.ok) {
-            isFavorite = !isFavorite;
-            message = isFavorite ? 'Added to favorites!' : 'Removed from favorites.';
+            isFavourite = !isFavourite;
+            message = isFavourite ? 'Added to favorites!' : 'Removed from favorites.';
         } else {
             message = 'Something went wrong.';
         }
@@ -87,7 +87,7 @@
         <p class="author">By: {author}</p>
         {#if session}
             <button class="fav-button" onclick={toggleFavorite}>
-                {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                {isFavourite ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
             <button class="read-button" onclick={toggleReadingStatus}>
                 {isReading ? "Mark as read" : "Mark as currently reading"}

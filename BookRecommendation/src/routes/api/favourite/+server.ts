@@ -4,13 +4,13 @@ import {json} from '@sveltejs/kit';
 import {and, eq} from "drizzle-orm";
 
 export const POST: RequestHandler = async ({request}) => {
-    const {bookId, userId, title, thumbnail, favorite} = await request.json();
+    const {bookId, userId, title, thumbnail, favourite} = await request.json();
 
     if (!userId || !bookId) {
         return json({error: 'Missing user or book ID'}, {status: 400});
     }
 
-    if (favorite) {
+    if (favourite) {
         await db.insert(favourites).values({
             user_id: userId,
             book_id: bookId,
@@ -47,7 +47,7 @@ export const GET: RequestHandler = async ({url}) => {
                 eq(favourites.book_id, bookId)
             ));
 
-        return json({isFavorite: result.length > 0});
+        return json({isFavourite: result.length > 0});
     } else { //Ha nincs, akkor kérje le a felhasználó összes kedvenc könyvét
         const result = await db
             .select({

@@ -17,7 +17,11 @@
         if (data.session?.user?.id) {
             const res = await fetch(`/api/favourite?userId=${data.session.user.id}`);
             const json = await res.json();
-            favourites = json.favourites;
+            favourites = json.favourites.map((item: any) => ({
+                id: item.bookId, // rename to match what's expected
+                title: item.title,
+                thumbnailUrl: item.thumbnailUrl
+            }));
         }
     });
 
