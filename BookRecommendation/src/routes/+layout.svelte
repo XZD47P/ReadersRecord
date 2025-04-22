@@ -17,7 +17,7 @@
             <a class:active={data.pathname === '/profile'} href="/profile">Profile</a>
             <button class="link-button" onclick={()=> signOut()}>Sign out</button>
         {:else}
-            <a class:active={data.pathname === '/signin'} href="/signin">Login</a>
+            <a class:active={data.pathname === '/login'} href="/login">Login</a>
         {/if}
     </div>
 </nav>
