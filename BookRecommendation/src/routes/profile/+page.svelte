@@ -60,14 +60,15 @@
     });
 
     //Horizontális görgetés
-    let scrollContainer: HTMLDivElement;
+    let scrollContainerFav: HTMLDivElement;
+    let scrollContainerRead: HTMLDivElement;
 
-    function scrollLeft() {
-        scrollContainer.scrollBy({left: -300, behavior: "smooth"});
+    function scrollLeft(container: HTMLDivElement) {
+        container.scrollBy({left: -300, behavior: "smooth"});
     }
 
-    function scrollRight() {
-        scrollContainer.scrollBy({left: 300, behavior: "smooth"});
+    function scrollRight(container: HTMLDivElement) {
+        container.scrollBy({left: 300, behavior: "smooth"});
     }
 </script>
 
@@ -89,17 +90,17 @@
 {#if favourites.length > 0}
     <div class="slider-wrapper">
         {#if favourites.length > 5}
-            <button class="scroll-btn left" on:click={scrollLeft} aria-label="Scroll left">
+            <button class="scroll-btn left" on:click={()=> scrollLeft(scrollContainerFav)} aria-label="Scroll left">
                 <i class="fas fa-arrow-left"></i>
             </button>
         {/if}
-        <div class="scroll-container" bind:this={scrollContainer}>
+        <div class="scroll-container" bind:this={scrollContainerFav}>
             {#each favourites as book}
                 <Book title={book.title} thumbnail={book.thumbnailUrl} id={book.id}/>
             {/each}
         </div>
         {#if favourites.length > 5}
-            <button class="scroll-btn right" on:click={scrollRight} aria-label="Scroll right">
+            <button class="scroll-btn right" on:click={() => scrollRight(scrollContainerFav)} aria-label="Scroll right">
                 <i class="fas fa-arrow-right"></i>
             </button>
         {/if}
@@ -112,17 +113,18 @@
 {#if readList.length > 0}
     <div class="slider-wrapper">
         {#if readList.length > 5}
-            <button class="scroll-btn left" on:click={scrollLeft} aria-label="Scroll left">
+            <button class="scroll-btn left" on:click={() => scrollLeft(scrollContainerRead)} aria-label="Scroll left">
                 <i class="fas fa-arrow-left"></i>
             </button>
         {/if}
-        <div class="scroll-container" bind:this={scrollContainer}>
+        <div class="scroll-container" bind:this={scrollContainerRead}>
             {#each readList as book}
                 <Book title={book.title} thumbnail={book.thumbnailUrl} id={book.id}/>
             {/each}
         </div>
         {#if readList.length > 5}
-            <button class="scroll-btn right" on:click={scrollRight} aria-label="Scroll right">
+            <button class="scroll-btn right" on:click={() => scrollRight(scrollContainerRead)}
+                    aria-label="Scroll right">
                 <i class="fas fa-arrow-right"></i>
             </button>
         {/if}
