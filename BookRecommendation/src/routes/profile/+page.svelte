@@ -19,6 +19,12 @@
         thumbnailUrl: string;
     }
 
+    let readList: Array<{
+        id: string;
+        title: string;
+        thumbnailUrl: string;
+    }> = [];
+
     onMount(async () => {
         if (data.session?.user?.id) {
             const res = await fetch(`/api/favourite?userId=${data.session.user.id}`);
@@ -38,6 +44,17 @@
                     title: item.title,
                     thumbnailUrl: item.thumbnailUrl
                 };
+            }
+
+            const readRes = await fetch(`/api/reading_status/read?userId=${data.session.user.id}`);
+            const readJson = await readRes.json();
+            if (readJson.read?.length > 0) {
+                readList = readJson.read.map((item: any) => ({
+                        id: item.bookId,
+                        title: item.title,
+                        thumbnailUrl: item.thumbnailUrl
+                    })
+                );
             }
         }
     });
@@ -89,6 +106,29 @@
     </div>
 {:else}
     <p>You haven't added any favorite books yet.</p>
+{/if}
+
+<h2>Books you read:</h2>
+{#if readList.length > 0}
+    <div class="slider-wrapper">
+        {#if readList.length > 5}
+            <button class="scroll-btn left" on:click={scrollLeft} aria-label="Scroll left">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        {/if}
+        <div class="scroll-container" bind:this={scrollContainer}>
+            {#each readList as book}
+                <Book title={book.title} thumbnail={book.thumbnailUrl} id={book.id}/>
+            {/each}
+        </div>
+        {#if readList.length > 5}
+            <button class="scroll-btn right" on:click={scrollRight} aria-label="Scroll right">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        {/if}
+    </div>
+{:else}
+    <p>You haven't read any books yet.</p>
 {/if}
 <style>
     h1, h2 {
