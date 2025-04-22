@@ -2,11 +2,11 @@ import {integer, sqliteTable, text, primaryKey} from "drizzle-orm/sqlite-core"
 import {drizzle} from 'drizzle-orm/better-sqlite3';
 import Database from "better-sqlite3";
 import type {AdapterAccountType} from "@auth/core/adapters";
+import {count} from "drizzle-orm";
+import {runSeed} from "$lib/db/seed";
 
-// This is the raw SQLite DB instance
-const sqlite = new Database("src/lib/db/database.db");
+export const sqlite = new Database("src/lib/db/database.db");
 
-// This is your Drizzle-wrapped version (used elsewhere)
 export const db = drizzle(sqlite);
 
 sqlite.exec(`
@@ -201,3 +201,8 @@ export const alreadyRead = sqliteTable(
         })
     })
 )
+
+const checkUsers = await db.select({count: count()}).from(users);
+if (checkUsers[0].count === 0) {
+    await runSeed();
+}
