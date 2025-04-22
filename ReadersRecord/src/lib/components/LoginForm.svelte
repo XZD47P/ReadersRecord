@@ -12,13 +12,15 @@
             const result = await signIn("credentials", {
                 email,
                 password,
-                callbackUrl: "/"
+                redirect: false
             });
-
         } catch (error) {
             errorMessage = "An error occurred during login.";
             console.error("Login error:", error);
         }
+
+        //Sikeres bejelentkezés esetén átiránytás
+        window.location.href = "/";
     }
 </script>
 
