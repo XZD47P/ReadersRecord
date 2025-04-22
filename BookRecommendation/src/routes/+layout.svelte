@@ -10,7 +10,10 @@
 
 <nav class="navbar">
     <div class="left">
-        <a class:active={data.pathname === '/'} href="/">Home</a>
+        <a class:active={data.pathname === '/'} href="/">
+            <i class="fa-solid fa-book-open fa-lg"></i>
+            Reader's Record
+        </a>
     </div>
     <div class="right">
         {#if data.session}
@@ -25,6 +28,7 @@
 <slot/>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
     .navbar {
         display: flex;
         gap: 1rem;
@@ -58,5 +62,11 @@
         color: inherit;
         margin-left: auto;
 
+    }
+
+    .left{
+        font-family:"Winky Rough", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
     }
 </style>
