@@ -183,6 +183,7 @@
         }
     }
 
+    .read-button,
     .fav-button {
         margin-top: 1rem;
         padding: 0.5rem 1rem;
@@ -203,5 +204,13 @@
         margin-top: 0.5rem;
         font-size: 0.9rem;
         color: #555;
+    }
+
+    .read-button{
+        background-color: #66fb56;
+    }
+
+    .read-button:hover{
+        background-color: #a5fa9c;
     }
 </style>
