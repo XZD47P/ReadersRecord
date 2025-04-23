@@ -99,5 +99,14 @@ Az alkalmazás az alábbi végpontokat biztosítja a felhasználók számára:
     - toggleReadingStatus(): A könyvet jelöli meg éppen olvasottnak vagy már olvasottnak
 - `BookRating.svelte`: A könyv értékelését kezeli. Kötelező propjai a bookId, illetve az onUpdate, ami a parent frissítését kezeli értékelés beküldése utána. Betöltéskor lekérdezi, hogy van-e az adott felhasználónak értékelése az adott könyvre, és ha igen, betölti azt.
   - **Funkciói**:
-    -  submitRating(): A megírt értékelést menti el, majd szól a parentnek, hogy frissítse az 
+    -  submitRating(): A megírt értékelést menti el, majd szól a parentnek, hogy frissítse az értékeléseket
+    -  deleteReview(): Ha a felhasználónak van értékelése, akkor lehetővé teszi, hogy törölhesse azt
+-  `BookReviews.svelte`: A könyvekhez tartozó értékeléseket jeleníti meg. Kötelező propok: averageRating, reviewCount, reviews.
+-  `LoginForm.svelte`: A bejelentkezési formot jeleníti meg.
+  - **Funkciói**:
+    - handleLogin(): Kezeli a bejelentkeztetést, meghívja az Auth.js-ből a signIn() metódust, ami configurálható különböző providerek szerint
+- `RegisterForm.svelte`: A regisztrációs formot jeleníti meg.
+  - **Funkciói**:
+    - registerUser(): A felhasználó által megadott adatok alapján létrehoz egy felhasználót egy API hivás segítségével
+- `ProfileCard.svelte`: A felhasználó profil oldalán jeleníti meg adatait névjegykártya formátumban, az adatokat a data propon keresztül tudjuk átadni neki.
 ---
