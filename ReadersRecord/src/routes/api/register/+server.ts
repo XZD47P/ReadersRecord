@@ -4,9 +4,9 @@ import {db, users} from "$lib/db/schema";
 import {eq} from "drizzle-orm";
 
 export const POST: RequestHandler = async ({request}) => {
-    const {name, email, password} = await request.json();
+    const {username, email, password} = await request.json();
 
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
         return new Response(JSON.stringify({error: "Missing fields"}), {status: 400})
     }
 
@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({request}) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     await db.insert(users).values({
-        name,
+        name: username,
         email,
         password: hashedPassword
     });

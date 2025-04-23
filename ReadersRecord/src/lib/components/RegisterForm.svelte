@@ -3,7 +3,7 @@
 
     let email = '';
     let password = '';
-    let name = '';
+    let username = '';
     let error = '';
     let success = '';
 
@@ -17,7 +17,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({email, password, name})
+            body: JSON.stringify({email, password, username})
         });
 
         const data = await res.json();
@@ -25,7 +25,7 @@
             success = 'User registered. You can now log in.';
             email = '';
             password = '';
-            name = '';
+            username = '';
         } else {
             error = data.error || 'Registration failed';
         }
@@ -44,8 +44,8 @@
         {/if}
 
         <div class="form-group">
-            <label for="name">Name</label>
-            <input bind:value={name} id="name" name="name" placeholder="John Doe" required type="text"/>
+            <label for="username">Username</label>
+            <input bind:value={username} id="username" name="username" placeholder="userName" required type="text"/>
         </div>
 
         <div class="form-group">
